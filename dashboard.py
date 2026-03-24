@@ -7,8 +7,6 @@ Created on Tue Mar 24 20:21:44 2026
 
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import plotly.express as px
 
 # ---------------- CONFIG ----------------
@@ -99,18 +97,21 @@ fig4 = px.line(resampled, title=f"{resample_option} Avg Closing Price", template
 st.plotly_chart(fig4, use_container_width=True)
 
 # ---------------- CORRELATION HEATMAP ----------------
+# ---------------- CORRELATION HEATMAP ----------------
 st.subheader("🔥 Correlation Heatmap")
 
 pivot_df = all_data.pivot(index='date', columns='Name', values='close')
+corr = pivot_df.corr()
 
-col1, col2, col3 = st.columns([1, 2, 1])
+fig5 = px.imshow(
+    corr,
+    text_auto=True,
+    color_continuous_scale='RdBu_r',
+    title="Stock Correlation Heatmap"
+)
 
-with col2:
-    fig5, ax = plt.subplots(figsize=(5, 3))
-    sns.heatmap(pivot_df.corr(), annot=True, cmap="coolwarm", fmt=".2f", ax=ax)
-    plt.title("Stock Correlation", fontsize=10)
-    st.pyplot(fig5, use_container_width=False)
+st.plotly_chart(fig5, use_container_width=True)
 
 # ---------------- FOOTER ----------------
 st.markdown("---")
-st.markdown("💡 *Built with Streamlit, Plotly & Seaborn | Designed for Data Analytics Portfolio by Shobhit Sharma*")
+st.markdown("💡 *Built with Streamlit, Plotly | Designed for Data Analytics Portfolio by Shobhit Sharma*")
