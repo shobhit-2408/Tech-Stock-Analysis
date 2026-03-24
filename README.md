@@ -6,7 +6,7 @@ An end-to-end **Stock Market Analysis Project** combining **Data Preprocessing, 
 
 ## 🚀 Live Demo
 
-👉 *(Add your Streamlit link here after deployment)*
+👉 **[View Interactive Dashboard](https://tech-stock-analysis-db.streamlit.app/)**
 
 ---
 
@@ -129,8 +129,8 @@ streamlit run dashboard.py
 **Shobhit Sharma**
 Aspiring Data Analyst
 
-🔗 LinkedIn:  https://www.linkedin.com/in/shobhit-sharma910/
-🔗 Portfolio: https://shobhitsdatahouse.lovable.app/
+🔗 [LinkedIn](https://www.linkedin.com/in/shobhit-sharma910/)
+🔗 [Portfolio](https://shobhitsdatahouse.lovable.app/)
 
 ---
 
