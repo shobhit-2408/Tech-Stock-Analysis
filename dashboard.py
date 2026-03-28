@@ -12,6 +12,43 @@ import plotly.express as px
 # ---------------- CONFIG ----------------
 st.set_page_config(page_title="📊 Stock Analysis Dashboard", layout="wide")
 
+st.markdown("""
+<style>
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Main background */
+.stApp {
+    background: linear-gradient(135deg, #020617, #0f172a);
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #020617 !important;
+}
+
+/* Metric Cards */
+div[data-testid="metric-container"] {
+    background-color: #111827;
+    border: 1px solid #1f2937;
+    padding: 15px;
+    border-radius: 14px;
+    box-shadow: 0px 4px 25px rgba(0,0,0,0.6);
+}
+
+/* Remove white padding */
+.block-container {
+    padding-top: 2rem;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #e5e7eb;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ---------------- LOAD DATA ----------------
 file_paths = {
     "AMZN": r"individual_stocks_5yr/AMZN_data.csv",
@@ -42,20 +79,66 @@ company_df = all_data[all_data['Name'] == selected_company].copy()
 company_df = company_df.sort_values('date')
 
 # ---------------- HEADER ----------------
-st.title("📈 Tech Stock Analysis Dashboard")
-st.markdown("Analyze stock trends, returns, and correlations interactively.")
+st.markdown("""
+<div style='text-align:center; padding: 20px 0 10px 0;'>
+    <h1 style='font-size:48px; margin-bottom:5px;'>📊 Tech Stock Analysis Dashboard</h1>
+    <p style='color:#9ca3af; font-size:18px;'>
+        Analyze stock trends, returns, and correlations interactively
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # ---------------- KPI SECTION ----------------
+st.markdown("---")
 latest_price = company_df['close'].iloc[-1]
 avg_price = company_df['close'].mean()
 max_price = company_df['close'].max()
 
-col1, col2, col3 = st.columns(3)
-col1.metric("💰 Latest Price", f"${latest_price:.2f}")
-col2.metric("📊 Average Price", f"${avg_price:.2f}")
-col3.metric("🚀 Max Price", f"${max_price:.2f}")
+kpi1, kpi2, kpi3 = st.columns(3)
+
+kpi1.markdown(f"""
+<div style='
+    background: rgba(17, 25, 40, 0.75);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+'>
+    <p style='color:#9ca3af;'>💰 Latest Price</p>
+    <h2>${latest_price:.2f}</h2>
+</div>
+""", unsafe_allow_html=True)
+
+kpi2.markdown(f"""
+<div style='
+    background: rgba(17, 25, 40, 0.75);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+'>
+    <p style='color:#9ca3af;'>📊 Average Price</p>
+    <h2>${avg_price:.2f}</h2>
+</div>
+""", unsafe_allow_html=True)
+
+kpi3.markdown(f"""
+<div style='
+    background: rgba(17, 25, 40, 0.75);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+'>
+    <p style='color:#9ca3af;'>🚀 Max Price</p>
+    <h2>${max_price:.2f}</h2>
+</div>
+""", unsafe_allow_html=True)
 
 # ---------------- PRICE TREND ----------------
+
+st.markdown("---")
+
 st.subheader("📉 Closing Price Trend")
 fig1 = px.line(company_df, x="date", y="close",
                title=f"{selected_company} Closing Prices",
@@ -63,6 +146,7 @@ fig1 = px.line(company_df, x="date", y="close",
 st.plotly_chart(fig1, use_container_width=True)
 
 # ---------------- MOVING AVERAGE ----------------
+st.markdown("---")
 st.subheader("📊 Moving Averages")
 for ma in [10, 20, 50]:
     company_df[f"MA_{ma}"] = company_df['close'].rolling(ma).mean()
@@ -73,6 +157,8 @@ fig2 = px.line(company_df, x="date",
 st.plotly_chart(fig2, use_container_width=True)
 
 # ---------------- DAILY RETURNS ----------------
+
+st.markdown("---")
 st.subheader("📈 Daily Returns (%)")
 company_df['Daily Return'] = company_df['close'].pct_change() * 100
 
@@ -81,6 +167,7 @@ fig3 = px.line(company_df, x="date", y="Daily Return",
 st.plotly_chart(fig3, use_container_width=True)
 
 # ---------------- RESAMPLING ----------------
+st.markdown("---")
 st.subheader("📅 Resampled Prices")
 resample_option = st.radio("Frequency", ["Monthly", "Quarterly", "Yearly"], horizontal=True)
 
@@ -98,6 +185,8 @@ st.plotly_chart(fig4, use_container_width=True)
 
 # ---------------- CORRELATION HEATMAP ----------------
 # ---------------- CORRELATION HEATMAP ----------------
+
+st.markdown("---")
 st.subheader("🔥 Correlation Heatmap")
 
 pivot_df = all_data.pivot(index='date', columns='Name', values='close')
@@ -113,5 +202,9 @@ fig5 = px.imshow(
 st.plotly_chart(fig5, use_container_width=True)
 
 # ---------------- FOOTER ----------------
-st.markdown("---")
-st.markdown("💡 *Built with Streamlit, Plotly | Designed for Data Analytics Portfolio by Shobhit Sharma*")
+st.markdown("""
+---
+<div style='text-align:center; color:#6b7280; font-size:14px;'>
+Built with Streamlit & Plotly | Portfolio Project by <b>Shobhit Sharma</b>
+</div>
+""", unsafe_allow_html=True)
